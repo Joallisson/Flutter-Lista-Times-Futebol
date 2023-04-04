@@ -1,14 +1,23 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_aula1/models/time.dart';
 import 'package:flutter_aula1/models/titulo.dart';
 
-class TimesRepository {
+class TimesRepository extends ChangeNotifier {
   final List<Time> _times = [];
 
-  get times => this._times;
+  UnmodifiableListView<Time> get times => UnmodifiableListView(_times);
 
   void addTitulo({required Time time, required Titulo titulo}) {
     time.titulos.add(titulo);
+    notifyListeners();
+  }
+
+  void editTitulo({required Titulo titulo, required String ano, required String campeonato}){
+    titulo.campeonato = campeonato;
+    titulo.ano = ano;
+    notifyListeners();
   }
 
   TimesRepository() {

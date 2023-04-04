@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_aula1/controllers/home_controller.dart';
 import 'package:flutter_aula1/models/time.dart';
 import 'package:flutter_aula1/pages/time_page.dart';
+import 'package:flutter_aula1/repositories/times_repositoriy.dart';
+import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -27,29 +30,30 @@ class _HomePageState extends State<HomePage> {
           child: Text("Brasileirão"),
         ),
       ),
-      body: ListView.separated(
-        itemBuilder: (BuildContext context, int index) {
-          final List<Time> tabela = controller.tabela;
-          return ListTile(
-            leading: Image.network(tabela[index].brasao),
-            title: Text(tabela[index].nome),
-            trailing: Text(tabela[index].pontos.toString()),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => TimePage(
-                          key: Key(tabela[index].nome), 
-                          time: tabela[index]
-                      )
-                  )
+      body: Consumer<TimesRepository>(
+        builder: (context, repositorio, child) {
+          return ListView.separated(
+            itemBuilder: (BuildContext context, int index) {
+              final List<Time> tabela = repositorio.times;
+              return ListTile(
+                leading: Image.network(tabela[index].brasao),
+                title: Text(tabela[index].nome),
+                subtitle: Text('Títulos: ${tabela[index].titulos.length}'),
+                trailing: Text(tabela[index].pontos.toString()),
+                onTap: () {
+                  Get.to(() => TimePage( //Navegar para outra tela
+                      key: Key(tabela[index].nome), 
+                      time: tabela[index]
+                    )
+                  );
+                },
               );
             },
+            separatorBuilder: (_, __) => const Divider(),
+            itemCount: repositorio.times.length,
+            padding: const EdgeInsets.all(16),
           );
         },
-        separatorBuilder: (_, __) => const Divider(),
-        itemCount: controller.tabela.length,
-        padding: const EdgeInsets.all(16),
       ),
     );
   }
