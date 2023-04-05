@@ -18,6 +18,16 @@ class _EditTituloPageState extends State<EditTituloPage> {
   final _ano = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  editar() {
+    final timesRepository = context.read<TimesRepository>();
+    timesRepository.editTitulo(
+      titulo: widget.titulo,
+      ano: _ano.text,
+      campeonato: _campeonato.text,
+    );
+    Get.back();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -26,25 +36,15 @@ class _EditTituloPageState extends State<EditTituloPage> {
     _campeonato.text = widget.titulo.campeonato;
   }
 
-  editar(){
-    Provider.of<TimesRepository>(context, listen: false).editTitulo(
-      titulo: widget.titulo, 
-      ano: _ano.text, 
-      campeonato: _campeonato.text
-    );
-    
-    Get.back();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text("Editar Título"),
         ),
         backgroundColor: Colors.grey[800],
-        actions: [IconButton(onPressed: editar(), icon: Icon(Icons.check))],
+        actions: [IconButton(onPressed:() => editar(), icon: const Icon(Icons.check))],
       ),
       body: Form(
         key: _formKey,
@@ -61,7 +61,7 @@ class _EditTituloPageState extends State<EditTituloPage> {
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value){
-                  
+
                   if (value!.isEmpty) {
                     return "Informe o ano do título";
                   }
@@ -88,33 +88,8 @@ class _EditTituloPageState extends State<EditTituloPage> {
                 },
               ),
             ),
-
-            // Expanded(
-            //   child: Container(
-            //     alignment: Alignment.bottomCenter,
-            //     margin: const EdgeInsets.all(24),
-            //     child: ElevatedButton(
-            //       onPressed: () {
-            //         if(_formKey.currentState!.validate()){
-            //           save();
-            //         }
-            //       },
-            //       child: Row(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: const [
-            //           Icon(Icons.check),
-            //           Padding(
-            //             padding:  EdgeInsets.all(16.0),
-            //             child:  Text('Salvar', style: TextStyle(fontSize: 20),),
-            //           )
-            //         ],
-            //       ),
-            //     ),
-            //   )
-            // )
-          ],
-        )
-      ),
+        ]),
+      )
     );
   }
 }

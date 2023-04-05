@@ -3,6 +3,7 @@ import 'package:flutter_aula1/models/time.dart';
 import 'package:flutter_aula1/models/titulo.dart';
 import 'package:flutter_aula1/pages/add_titulo_page.dart';
 import 'package:flutter_aula1/repositories/times_repositoriy.dart';
+import 'package:flutter_aula1/widgets/brasao.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:flutter_aula1/pages/edit_titulo_page.dart';
@@ -50,16 +51,15 @@ class _TimePageState extends State<TimePage> {
             )
           ],
         ),
+
         body: TabBarView(children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Image.network(
-                    widget.time.brasao,
-                    scale: 2.0,
-                  )),
+                  child: Brasao(image: widget.time.brasao, width: 150,)
+                  ),
               Text(
                 "Pontos: ${widget.time.pontos}",
                 style: const TextStyle(fontSize: 22),
@@ -87,7 +87,7 @@ class _TimePageState extends State<TimePage> {
                 title: Text(time.titulos[index].campeonato),
                 trailing: Text(time.titulos[index].ano),
                 onTap: (){
-                  Get.to(
+                  Get.to(() =>
                     EditTituloPage(titulo: time.titulos[index]),
                     fullscreenDialog: true
                   );
@@ -95,6 +95,7 @@ class _TimePageState extends State<TimePage> {
               );
             },
             separatorBuilder: (_, __) => const Divider(),
-            itemCount: quantidade);
+            itemCount: quantidade
+          );
   }
 }
